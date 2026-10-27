@@ -12,6 +12,8 @@ tablero = [
     [0, 0, 0, 0, 8, 0, 0, 7, 9],
 ]
  
+pasos = 0
+retrocediendo = False
  
 def validar(num, col, fil):
     # Fila
@@ -43,22 +45,32 @@ def fcdisponible():
  
  
 def sudoku():
-
+    global pasos, retrocediendo
+ 
     fil, col = fcdisponible()
     if fil == -1 and col == -1:
-
         return True
     else:
         for num in range(1, 10):
             if validar(num, col, fil):
-                tablero[fil][col] = num      
+                tablero[fil][col] = num
+                pasos += 1
  
-                if sudoku():            
+                if retrocediendo:
+                    print("Retroceso hasta fila", fil + 1, "columna", col + 1)
+                    retrocediendo = False
+ 
+                print("Paso", pasos, ": fila", fil + 1, "columna", col + 1, "->", num)
+                imprimir()
+                print()
+ 
+                if sudoku():
                     return True
  
-                tablero[fil][col] = 0   
+                tablero[fil][col] = 0
  
-        return False     
+        retrocediendo = True
+        return False
  
  
 def imprimir():
